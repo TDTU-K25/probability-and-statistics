@@ -123,5 +123,40 @@ committee_5 = list(itertools.product(choose_3_men, choose_2_women))
 #     print(s)
 
 """Exercise 6"""
-deck_card = cross('S', '1234567889JQK') | cross('C', '1234567889JQK') | cross(
-    'D', '1234567889JQK') | cross('H', '1234567889JQK')
+# A 2 3 4 5 6 7 8 9 10 J Q K equivalent to
+# 1 2 3 4 5 6 7 8 9 T  J Q K
+deck_card = cross('S', '123456789TJQK') | cross('C', '123456789TJQK') | cross(
+    'D', '123456789TJQK') | cross('H', '123456789TJQK')
+
+poker_5 = list(itertools.combinations(deck_card, 5))
+len_poker_5 = len(poker_5)
+
+# Chọn 3 lá bài bất kỳ trong bộ bài 52 lá
+three_cards = list(itertools.combinations(deck_card, 3))
+
+# Chọn 3 lá bài có cùng hạng
+three_kind_same_denomination = []
+for s in three_cards:
+    if (s[0][1] == s[1][1] and s[1][1] == s[2][1] and s[0][1] == s[2][1]):
+        three_kind_same_denomination.append(s)
+
+# Chọn 2 lá bài bất kỳ trong bộ bài 52 lá
+two_other_cards = list(itertools.combinations(deck_card, 2))
+
+# Chọn 5 lá bài trong đó có 3 lá bài cùng hạng và 2 lá bài bất kì
+three_of_a_kind_two_other_cards = list(itertools.product(
+    three_kind_same_denomination, two_other_cards))
+
+three_of_a_kind = []
+for s in three_of_a_kind_two_other_cards:
+    denomination_of_previous_three_cards = s[0][0][1]
+    # Chọn 2 lá bài khác hạng với hạng của 3 lá bài trước đó và 2 lá bài này phải khác hạng nhau
+    if (denomination_of_previous_three_cards == s[1][0][1] or denomination_of_previous_three_cards == s[1][1][1] or s[1][0][1] == s[1][1][1]):
+        continue
+    three_of_a_kind.append(s)
+
+len_three_of_a_kind = len(three_of_a_kind)
+
+# for s in three_of_a_kind:
+#     print(s)
+# print(len_three_of_a_kind)
