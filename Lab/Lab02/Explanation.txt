@@ -1,0 +1,50 @@
+itertools.product(): tích descartes
+
+Xác suất lý thuyết: len(event) / len(space)
+
+
+U6 = [(W2, R1, B5, W3, R6, W1), ...] tuple
+
+Chức năng của hàm combos: join all items in a tuple (combo) into a string, using a space character as separator tóm lại là chuyển từ tuple về string
+
+U6 = ['W2 R1 B5 W3 R6 W1', ...] string
+
+'W2 R1 B5 W3 R6 W1'.count('W') = 2
+
+
+red6 = {s for s in U6 if s.count('R') == 6}
+
+equivalent to
+
+red6 = []
+for s in U6:
+    if s.count('R') == 6:
+        red6.append(s)
+
+
+- Xác suất thực nghiệm: lim(n -> infinity) times / n
+    Trong đó:
+        n: số lần thực nghiệm (số lần thử)
+        times: số lần thực nghiệm thỏa mãn điều kiện 
+
+- Ví dụ: Tính xác suất để khi gieo đồng xu được mặt sấp
+    + Xác suất lý thuyết: 1/2 = 50%
+    + Xác suất thực nghiệm:
+        Quy định: 1 là mặt sấp, 0 là mặt ngửa
+        Ví dụ: 
+            Trong 10 lần gieo đồng xu (n = 10), ta được kết quả như sau:
+                Lần 1: 0
+                Lần 2: 0
+                Lần 3: 1
+                Lần 4: 0
+                Lần 5: 1
+                Lần 6: 0
+                Lần 7: 1
+                Lần 8: 0
+                Lần 9: 0
+                Lần 10: 1
+
+            4/10 = 40%
+
+
+Số lần thực nghiệm (số lần thử) càng lớn thì xác suất thực nghiệm sẽ cho ra kết quả gần đúng với xác suất lý thuyết
