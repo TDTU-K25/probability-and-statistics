@@ -156,3 +156,133 @@ def exercise2():
 
 
 # exercise2()
+
+# Don't use built-in function
+def exercise2_v2():
+    dataset_population = pd.read_csv('population.csv')
+    dataset_population = dataset_population.sort_values('Country Name')
+
+    # Hiển thị 5 dòng dữ liệu đầu tiên
+    print(dataset_population.head(5))
+
+    countriesName = []
+    for row in dataset_population['Country Name']:
+        if row not in countriesName:
+            countriesName.append(row)
+    countriesName = sorted(countriesName)
+
+    countriesCode = []
+    for row in dataset_population['Country Code']:
+        if row not in countriesCode:
+            countriesCode.append(row)
+    countriesCode = sorted(countriesCode)
+
+    def count():
+        result = []
+        count = 1
+        i = 0
+        while (i < len(dataset_population) - 1):
+            if dataset_population.iloc[i]['Country Name'] == dataset_population.iloc[i + 1]['Country Name']:
+                count += 1
+                if (i == len(dataset_population) - 2):  # the last country
+                    result.append(count)
+            else:
+                result.append(count)
+                count = 1  # reset count for next country
+            i += 1
+        return result
+
+    countByYear = count()
+
+    def mean():
+        result = []
+        start_idx = 0
+        i = 0  # index of list countByYear
+        # end_idx - start_idx + 1 = number of time that country occurs in a file
+        end_idx = countByYear[i] - 1
+        sum = 0
+        while (start_idx != len(dataset_population) - 1):
+            while (start_idx <= end_idx):
+                sum += dataset_population.iloc[start_idx].Value
+                start_idx += 1
+            result.append(sum / countByYear[i])
+            i += 1
+            if (i == len(countriesName)):  # Finish
+                break
+            sum = 0  # reset sum for next country
+            end_idx = start_idx + countByYear[i] - 1
+        return result
+
+    meanByYear = mean()
+
+    def std():
+        result = []
+        start_idx = 0
+        i = 0  # index of list countByYear and list meanByYear
+        end_idx = countByYear[i] - 1
+        variance = 0
+        while (start_idx != len(dataset_population) - 1):
+            while (start_idx <= end_idx):
+                variance += (
+                    (dataset_population.iloc[start_idx].Value - meanByYear[i]) ** 2)
+                start_idx += 1
+            # standard deviation of sample
+            result.append(math.sqrt(variance / (countByYear[i] - 1)))
+            i += 1
+            if (i == len(countriesName)):
+                break
+            variance = 0  # reset variance for next country
+            end_idx = start_idx + countByYear[i] - 1
+        return result
+
+    stdByYear = std()
+
+    def min():
+        result = []
+        start_idx = 0
+        i = 0
+        end_idx = countByYear[i] - 1
+        min = dataset_population.iloc[0].Value
+        while (start_idx != len(dataset_population) - 1):
+            while (start_idx <= end_idx):
+                if min > dataset_population.iloc[start_idx].Value:
+                    min = dataset_population.iloc[start_idx].Value
+                start_idx += 1
+            result.append(min)
+            i += 1
+            if (i == len(countriesName)):
+                break
+            # reset min for next country
+            min = dataset_population.iloc[start_idx].Value
+            end_idx = start_idx + countByYear[i] - 1
+        return result
+
+    minByYear = min()
+
+    def max():
+        result = []
+        start_idx = 0
+        i = 0
+        end_idx = countByYear[i] - 1
+        max = dataset_population.iloc[0].Value
+        while (start_idx != len(dataset_population) - 1):
+            while (start_idx <= end_idx):
+                if max < dataset_population.iloc[start_idx].Value:
+                    max = dataset_population.iloc[start_idx].Value
+                start_idx += 1
+            result.append(max)
+            i += 1
+            if (i == len(countriesName)):
+                break
+            # reset max for next country
+            max = dataset_population.iloc[start_idx].Value
+            end_idx = start_idx + countByYear[i] - 1
+        return result
+
+    maxByYear = max()
+
+    df = pd.DataFrame({'Country name': countriesName, 'Country Code': countriesCode, 'Count': countByYear,
+                      'Mean': meanByYear, 'Std': stdByYear, 'Min': minByYear, 'Max': maxByYear})
+    print(df)
+
+# exercise2_v2()
